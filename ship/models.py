@@ -23,28 +23,17 @@ class Soldier(models.Model):
 
 class RecordManager(models.Manager):
     def create_singlerecord(self, compartment, tag_string):
-
         time_tag = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        all_soldiers = Soldier.objects.get(tag=tag_string)
-        # soldier_name = 'Gibor'
-        # for ship_soldier in all_soldiers:
-        #     if ship_soldier.tag == tag_string:
-        #         soldier_name = ship_soldier.soldier_name
-
-        singlerecord = self.create(compartment=compartment, soldier_name=soldier_name, tag_string=tag_string, time_stamp=time_tag)
+        soldier = Soldier.objects.get(tag=tag_string)
+        singlerecord = self.create(compartment=compartment, soldier=soldier, soldier_name=soldier.soldier_name, tag_string=tag_string
+                                   , time_stamp=time_tag)
         return singlerecord
 
 
 class SingleRecord(models.Model):
+    soldier = models.ForeignKey(Soldier, on_delete=models.CASCADE, related_name='records', null=True)
     time_stamp = models.CharField(max_length=250)
     soldier_name = models.CharField(max_length=250, default='ah sheli')
     tag_string = models.CharField(max_length=250, default='0x00 0x00 0x00 0x00')
     compartment = models.IntegerField(default=532)
-    soldier = models.ForeignKey(Soldier, on_delete=models.CASCADE)
     objects = RecordManager()
-
-
-
-
-
-

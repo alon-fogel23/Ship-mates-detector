@@ -6,8 +6,9 @@ import time
 #  import numpy
 
 #  arduinoData = serial.Serial('/dev/ttyUSB1', 115200)  #not working
-arduinoData = serial.Serial('com5', 115200)    # working
+# arduinoData = serial.Serial('com3', 115200)    # working for uno rfid
 # arduinoDataMega = serial.Serial('com7', 9600)
+arduinoData = serial.Serial('com4', 9600)  # mega hc-05
 # compartment = models.IntegerField(532)
 # time_tag = "1999-12-31 14:30:59"  ---- working !
 # time_tag = models.DateTimeField(auto_now_add=True, blank=True)  ---- not working
@@ -23,7 +24,7 @@ while True:
     # soldier_tag_Mega = arduinoDataMega.readline().decode('utf-8').strip('\r\n')
     print(soldier_tag)
     # print(soldier_tag_Mega)
-    record_for_db = SingleRecord.objects.create_singlerecord(compartment, soldier_tag)  # , time_tag
+    record_for_db = SingleRecord.objects.create_singlerecord(compartment, soldier_tag)  # , time_tag - last one that worked for rfid
     # record_for_db_Mega = SingleRecord.objects.create_singlerecord(compartmentMega, soldier_tag_Mega)  # , time_tag
     # record_for_db.save()
 
