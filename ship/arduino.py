@@ -14,17 +14,23 @@ arduinoData = serial.Serial('com4', 9600)  # mega hc-05
 # time_tag = models.DateTimeField(auto_now_add=True, blank=True)  ---- not working
 
 # time_tag = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # '2006-10-25 14:30:59'
-compartment = 532
-# compartmentMega = 522
+compartmentUno = 532
+compartmentMega = 522
 
 while True:
     while arduinoData.inWaiting() == 0:
         pass  # do nothing
     soldier_tag = arduinoData.readline().decode('utf-8').strip('\r\n')
+    tag_data = soldier_tag.split(",")
     # soldier_tag_Mega = arduinoDataMega.readline().decode('utf-8').strip('\r\n')
-    print(soldier_tag)
+    print(tag_data)
+
+    if tag_data[0] and soldier_tag[2]:
+        record_for_db_Mega = SingleRecord.objects.create_singlerecord(compartmentMega, tag_data[0], tag_data[2])
+
+
     # print(soldier_tag_Mega)
-    record_for_db = SingleRecord.objects.create_singlerecord(compartment, soldier_tag)  # , time_tag - last one that worked for rfid
+    # record_for_db = SingleRecord.objects.create_singlerecord(compartment, soldier_tag)  # , time_tag - last one that worked for uno rfid
     # record_for_db_Mega = SingleRecord.objects.create_singlerecord(compartmentMega, soldier_tag_Mega)  # , time_tag
     # record_for_db.save()
 

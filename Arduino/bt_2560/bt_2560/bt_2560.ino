@@ -12,14 +12,14 @@ void setup()
  
   Serial.begin(9600);
 
-  Serial.println("enter hc-05 to AT mode");
+  //Serial.println("enter hc-05 to AT mode");
   delay(20000);
   
   BTSerial.begin(38400);  // HC-05 default speed in AT command more
 
  
   BTSerial.print("\r");
-  Serial.println("press and hold HC-05 button");
+  //Serial.println("press and hold HC-05 button");
   delay(5000);
   BTSerial.print("AT+INIT\r\n");
   delay(100);
@@ -46,6 +46,7 @@ void loop()
     { 
       id = readSerial(h);
       Serial.write(id);
+      Serial.println();
       
       
     }
@@ -99,9 +100,9 @@ char* readSerial (int h)
     {
 
         for (int i = 0; i <h; i ++)
-        {// the id's start after the first ":"
+        {
             input = (char) BTSerial.read ();
-            if (input == ':')
+            if (input == ':')                    // the id's start after the first ":"
               flag = 1;
             if (flag==1)
             {
@@ -121,29 +122,4 @@ char* readSerial (int h)
       }
 }
 
-/*
-char* readSerial(int h) 
-{
-    char input;
-    char buffer[100];
-    if (BTSerial.available() > 0)
-    {
-        int j = 0;
-        for (int i = 0; i < h; i++)
-        {
-            input = (char)BTSerial.read();
-            if(i >= 21) 
-            {
-                buffer[j] = input;
-                buffer[j+1] = '\0';
-                j++;
-            }
-        }
-        return buffer;
-    } 
-    else 
-    {
-        return "No Data";
-    }
-}
-*/
+
