@@ -26,7 +26,7 @@ class RecordManager(models.Manager):
         time_tag = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         try:
             soldier = Soldier.objects.get(tag=tag_string)
-            singlerecord = self.create(compartment=compartment, soldier=soldiers[0], soldier_name=soldier.soldier_name, tag_string=tag_string
+            singlerecord = self.create(compartment=compartment, soldier=soldier[0], soldier_name=soldier.soldier_name, tag_string=tag_string
                                        , time_stamp=time_tag, signal_strength=signal)
             return singlerecord
         except:

@@ -7,31 +7,24 @@ def index(request):
     all_records = SingleRecord.objects.all()
     all_soldiers = Soldier.objects.all()
 
+    compartment_to_name = {532: 'cic', 522: 'engine'}  # TODO: should be saved in the db
 
-    # for soldier in all_soldiers:
-    #       last_records = SingleRecord.objects.filter('soldier.soldier_name').latest('time_stamp')
-
-    last_record_soldier_1 = SingleRecord.objects.filter(tag_string='0xA4 0xD8 0xB8 0x62').latest('time_stamp')
-    last_record_soldier_2 = SingleRecord.objects.filter(tag_string='0xC1 0xA6 0x52 0x26').latest('time_stamp')
-    cic_counter = 0
-    engine_counter = 0
-
-    if last_record_soldier_1.compartment == 532:
-        cic_counter = cic_counter + 1
-    if last_record_soldier_1.compartment == 522:
-        engine_counter = engine_counter + 1
-    if last_record_soldier_2.compartment == 532:
-        cic_counter = cic_counter + 1
-    if last_record_soldier_2.compartment == 522:
-        engine_counter = engine_counter + 1
+    counters = {}
+    present_soldiers = {}
+    for soldier in all_soldiers:
+        last_read = soldier.records.last()
+        compartment = compartment_to_name[last_read.compartment]
+        present_soldier = last_read.soldier_name
+        if compartment not in counters:
+            counters[compartment] = 1
+            present_soldiers[compartment] = ' ' + present_soldier
+        else:
+            counters[compartment] += 1
+            present_soldiers[compartment] += ' ' + present_soldier
 
     return render(request, 'ship/index.html',
                   {'all_departments': all_departments, 'all_records': all_records,
-                   # 'last_records': last_records
-                   'last_record_soldier_1': last_record_soldier_1,
-                   'last_record_soldier_2': last_record_soldier_2,
-                   'cic_counter': cic_counter,
-                   'engine_counter': engine_counter
+                   'counters': counters, 'present_soldiers': present_soldiers
                    })
 
 

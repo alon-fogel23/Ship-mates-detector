@@ -9,19 +9,30 @@
         <h1> Ship Layout</h1>
         <h1> </h1>
         <div class="row">
-            <div class="col-md-4 col-md-offset-2" style="background-color:gray; border: 2px solid black"><strong><p class="text-center">ENGINE ROOM</p></strong><br><br><strong><p class="text-center">{{ engine_counter }}</p></strong><br></div>
-            <div class="col-md-4" style="background-color:gray; border: 2px solid black"><strong><p class="text-center">CIC</p></strong><br><br><strong><p class="text-center">{{ cic_counter }}</p></strong><br></div>
+            <div class="col-md-4 col-md-offset-2" style="background-color:gray; border: 2px solid black"><strong><p class="text-center">ENGINE ROOM</p></strong><br><br><strong><p class="text-center">{{ counters.engine }}</p></strong><br></div>
+            <div class="col-md-4" style="background-color:gray; border: 2px solid black"><strong><p class="text-center">CIC</p></strong><br><br><strong><p class="text-center">{{ counters.cic }}</p></strong><br></div>
         </div>
     </div>
 
     <h1>CIC soldiers</h1>
-    <ul>
-{#            {% for singlerecord in last_records %}#}
-{#                {% if singlerecord.compartment == 532 %}#}
-{#                {{ singlerecord.soldier_name }}#}
-{#                {% endif %}#}
-{#            {% endfor %}#}
+    <ul><strong>
+        {{ present_soldiers.cic }}
+        </strong>
     </ul>
+
+
+    <h1>Engine Room soldiers</h1>
+    <ul>
+        {{ present_soldiers.engine }}
+    </ul>
+
+
+
+    {% comment %}          {% for singlerecord in all_records %}
+              {% if singlerecord.compartment == 532 %}
+                {{ singlerecord.soldier_name }}
+              {% endif %}
+          {% endfor %}{% endcomment %}
 
 {#   <h1>Here are all the ship records</h1>#}
 {#    <ul>#}
