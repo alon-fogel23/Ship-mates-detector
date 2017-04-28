@@ -1,0 +1,75 @@
+body{
+    /*background: white url("images/blue_sea_ship_sky_248_1920x1080.jpg")*/
+}
+.table-soldiers-container{
+    width: 30%;
+    margin: 0 auto;
+}
+
+.ppp-title{
+    margin-left: 30%;
+}
+
+.ship-container{
+    background-image: url("images/white-ship - Copy.jpg");
+    background-repeat: no-repeat;
+    width: 800px;
+    height: 469px;
+    background-size: 100%;
+    margin: 0 auto;
+    display: flex;
+}
+
+.ship-compartment{
+    flex: 1;
+    font-size: 26px;
+    /*border: 1px solid red;*/
+}
+
+.c1-spacer{
+    height: 40%;
+}
+
+.c1-content{
+    height: 20%;
+    align-items: center;
+    display: flex;
+}
+
+.c2-spacer-top{
+    height: 65%;
+}
+
+.c2-spacer-bottom{
+    height: 10%;
+}
+
+.c2-content{
+    height: 25%;
+    align-items: center;
+    display: flex;
+}
+
+.c3-spacer{
+    height: 40%;
+}
+
+.c3-content{
+    height: 20%;
+    align-items: center;
+    display: flex;
+}
+
+.c4-spacer-top{
+    height: 80%;
+}
+
+.c4-spacer-bottom{
+    height: 5%;
+}
+
+.c4-content{
+    height: 15%;
+    align-items: center;
+    display: flex;
+}

@@ -1,0 +1,148 @@
+{% extends 'ship/base.html' %}
+{% block title %}index{% endblock %}
+
+
+{% block body %}
+
+
+    <div class="container-fluid">
+        <h1 align="center"><span class="label label-primary"> INS EILAT  </span></h1>
+
+
+        {% if ship_in_battle_stations == 'SHIP IN BATTLE STATIONS !'  %}
+            <h1 align="center"><span class="label label-success"  > {{ ship_in_battle_stations }} </span> </h1>
+        {% else %}
+           <h1 align="center"><span class="label label-warning"  > {{ ship_in_battle_stations }} </span> </h1>
+        {% endif %}
+    <br>
+
+       <!-- prototype rectangle version of ship compartments
+        <div class="row">
+            <div class="col-md-4 col-md-offset-2" style="background-color:gray; border: 2px solid black"><strong><p class="text-center">ENGINE ROOM</p></strong><br><br><strong><p class="text-center">{{ counters.engine }}</p></strong><br></div>
+            <div class="col-md-4" style="background-color:gray; border: 2px solid black"><strong><p class="text-center">CIC</p></strong><br><br><strong><p class="text-center">{{ counters.cic }}</p></strong><br></div>
+        </div>
+        -->
+
+        <div class="ship-container">
+            <div class="ship-compartment c1">
+                <div class="c1-spacer"></div>
+                <div class="c1-content">
+                    <div class="label label-primary" style="margin: 0 auto; align-self: center;">{{ counters.bow }}</div>
+                </div>
+                <div class="c1-spacer"></div>
+            </div>
+            <div class="ship-compartment c2">
+                <div class="c2-spacer-top"></div>
+                <div class="c2-content">
+                    <div class="label label-primary" style="margin: 0 auto; align-self: center;">{{ counters.cic }}</div>
+                </div>
+                <div class="c2-spacer-bottom"></div>
+            </div>
+            <div class="ship-compartment c3">
+                <div class="c3-spacer"></div>
+                <div class="c3-content">
+                    <div class="label label-primary" style="margin: 0 auto; align-self: center;">{{ counters.bridge }}</div>
+                </div>
+                <div class="c3-spacer"></div>
+            </div>
+            <div class="ship-compartment c4">
+                <div class="c4-spacer-top"></div>
+                <div class="c4-content">
+                    <div class="label label-primary" style="margin: 0 auto; align-self: center;">{{ counters.engine }}</div>
+                </div>
+                <div class="c4-spacer-bottom"></div>
+            </div>
+        </div>
+    </div>
+
+    <br /><br />
+    <div class="table-soldiers-container">
+        <h1 >MISSING SOLDIERS</h1>
+        <table class="table">
+            <tr>
+                <th style="color: red">First Name</th>
+            </tr>
+            {% for solider in missing_soldiers %}
+                <tr>
+                    <td style="color: red">{{ solider }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table-soldiers-container">
+        <h1>BOW SOLDIERS</h1>
+        <table class="table">
+            <tr>
+                <th>First Name</th>
+            </tr>
+            {% for solider in present_soldiers.bow %}
+                <tr>
+                    <td>{{ solider }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <br /><br />
+    <div class="table-soldiers-container">
+        <h1>CIC SOLDIERS</h1>
+        <table class="table">
+            <tr>
+                <th>First Name</th>
+            </tr>
+            {% for solider in present_soldiers.cic %}
+                <tr>
+                    <td>{{ solider }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <br /><br />
+    <div class="table-soldiers-container">
+        <h1>BRIDGE SOLDIERS</h1>
+        <table class="table">
+            <tr>
+                <th>First Name</th>
+            </tr>
+            {% for solider in present_soldiers.bridge %}
+                <tr>
+                    <td>{{ solider }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <br /><br />
+    <div class="table-soldiers-container">
+        <h1>ENGINE SOLDIERS</h1>
+        <table class="table">
+            <tr>
+                <th>First Name</th>
+            </tr>
+            {% for solider in present_soldiers.engine %}
+                <tr>
+                    <td>{{ solider }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+
+
+    {% comment %}          {% for singlerecord in all_records %}
+              {% if singlerecord.compartment == 532 %}
+                {{ singlerecord.soldier_name }}
+              {% endif %}
+          {% endfor %}{% endcomment %}
+
+{#   <h1>Here are all the ship records</h1>#}
+{#    <ul>#}
+{#        {% for singlerecord in all_records %}#}
+{#        <li>{{ singlerecord.tag_string}}, {{singlerecord.time_stamp}}, {{singlerecord.compartment }}</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'ship/base.html' %}
+{% block title %}records{% endblock %}
+{% block body %}
+    <h1>Here are all the ship records</h1>
+    <ul>
+        {% for singlerecord in all_records %}
+        <li>{{ singlerecord.tag_string}}, {{singlerecord.time_stamp}}, {{singlerecord.compartment }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'ship/base.html' %}
+{% block title %}departments{% endblock %}
+{% block body %}
+
+    <h1>Here are the ship departments</h1>
+    <ul>
+        {% for department in all_departments %}
+        <li><a href="{% url 'ship:details' department.id %}">{{ department.department_name }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

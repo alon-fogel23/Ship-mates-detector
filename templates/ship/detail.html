@@ -1,0 +1,32 @@
+{% extends 'ship/base.html' %}
+{% block title %}detail{% endblock %}
+{% block body %}
+    <img src="{{ department.department_logo }}">
+
+    <h1> {{ department.department_name }}</h1>
+    <h2>{{ department.officer }}</h2>
+
+
+    {% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    {% for soldier in department.soldier_set.all %}
+      <li> <label for="soldier{{ forloop.counter }}">
+            {{ soldier.soldier_name }}
+        </label></li>
+    {% endfor %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
