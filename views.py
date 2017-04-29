@@ -19,15 +19,22 @@ def index(request):
 
     counters = {}
     missing_counters = {}
+    battle_station_counter = 0
+
     present_soldiers = {}
     missing_soldiers = {}
-    battle_station_counter = 0
+    unauthorized_soldiers = {}
+    lack_of_movement_soldiers = {}
+
     for soldier in all_soldiers:
         # filtering the best read for each soldier of the past 10 seconds read-outs
         last_read = soldier.records.latest('time_stamp')
         last_record_time_1 = parse_datetime(last_read.time_stamp)
         best_match_record = soldier.records.filter(time_stamp__gte=(last_record_time_1 + timedelta(seconds=-10)).strftime('%Y-%m-%d %H:%M:%S')).order_by("-signal_strength")[0]
-        soldier.current_compartment = best_match_record.compartment  # stopped working. why ??
+        updated_soldier = Soldier.objects.update_soldier(best_match_record.compartment, soldier.soldier_name)
+        # temp_comp = best_match_record.compartment  # stopped working. why ??
+        # soldier.current_compartment = temp_comp
+        # print("soldier current compartment %s" % updated_soldier.current_compartment)
         # print("best match record time stamp for %s" % soldier.soldier_name + " is %s" % best_match_record.time_stamp)
 
         #  implementing the man over board feature - can set different times for different soldiers
@@ -55,7 +62,20 @@ def index(request):
             elapsedtime_sleeping_person = last_seen - before_current_compartment_record_time_stamp
             time_difference_sleeping_person_in_minutes = elapsedtime_sleeping_person / timedelta(minutes=1)
             if time_difference_sleeping_person_in_minutes > soldier.sleep_time_pre_defined_max_time:
-                print("soldier %s" % soldier.soldier_name + " has maxed out his maximum allowed sleeping time (%d min)" % soldier.sleep_time_pre_defined_max_time)  # for debug only - still needs to be shown in app
+                if soldier.soldier_name not in lack_of_movement_soldiers:
+                    lack_of_movement_soldiers[soldier.soldier_name] = {soldier.soldier_name.lower()}
+                else:
+                    lack_of_movement_soldiers[soldier.soldier_name].add(soldier.soldier_name.lower())
+        else:
+            earliest_reading = soldier.records.earliest('time_stamp')
+            earliest_reading_time_stamp = parse_datetime(earliest_reading.time_stamp)
+            if (last_seen - earliest_reading_time_stamp)/timedelta(minutes=1) > soldier.sleep_time_pre_defined_max_time:
+                if soldier.soldier_name not in lack_of_movement_soldiers:
+                    lack_of_movement_soldiers[soldier.soldier_name] = {soldier.soldier_name.lower()}
+                else:
+                    lack_of_movement_soldiers[soldier.soldier_name].add(soldier.soldier_name.lower())
+        print(lack_of_movement_soldiers)
+        # print("soldier %s" % soldier.soldier_name + " has maxed out his maximum allowed sleeping time (%d min)" % soldier.sleep_time_pre_defined_max_time)  # for debug only - still needs to be shown in app
         # end of lack of movement
 
         # battle stations
@@ -71,7 +91,10 @@ def index(request):
         # unauthorized personnel
         current_compartment_for_security_class_check = all_compartment.filter(compartment_name=best_match_record.compartment)[0]
         if soldier.soldier_security_class < current_compartment_for_security_class_check.compartment_security_class:
-            print("soldier %s" % soldier.soldier_name + " is in unauthorized zone") # for debug only - still needs to be shown in app
+            if soldier.soldier_name not in unauthorized_soldiers:
+                unauthorized_soldiers[soldier.soldier_name] = {soldier.soldier_name}
+        # print("soldier %s" % soldier.soldier_name + " is in unauthorized zone") # for debug only - still needs to be shown in app
+        # print("should be in unauthorized list %s" % unauthorized_soldiers[current_compartment_for_security_class_check])
         # end of unauthorized personnel
 
         # home page counters presentation
@@ -82,16 +105,17 @@ def index(request):
         else:
             counters[current_compartment] += 1
             present_soldiers[current_compartment].add(present_soldier)
-
+        # print(unauthorized_soldiers)
     return render(request, 'ship/index.html',
                   {'all_departments': all_departments, 'all_records': all_records,
                    'counters': counters, 'present_soldiers': present_soldiers, 'all_soldiers': all_soldiers,
                    'ship_in_battle_stations': ship_in_battle_stations, 'missing_soldiers': missing_soldiers,
-                   'missing_counters': missing_counters
+                   'missing_counters': missing_counters, 'unauthorized_soldiers': unauthorized_soldiers,
+                   'lack_of_movement_soldiers': lack_of_movement_soldiers
                    })
 
 
-def search_soldier(request):   # not working !!
+def search_soldier(request):
     name = request.GET.get('username', None)
     compartment_to_return = Soldier.objects.all().filter(soldier_name=name)[0].current_compartment
     data = {

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ship{% endblock %}</title>
+    {%  load staticfiles %}
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'ship/style.css' %}" />
+    <link rel='http://fonts.googleapis.com/css?family=satisfy' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+    <script type="text/javascript">
+       $(document).ready(function() {
+           $("#soldier-search").submit(function(event){
+               event.preventDefault();
+               var username = $("#soldier-name-to-query").val();
+                $.ajax({
+                     url:'search_soldier/',
+                     data: {
+                        'username': username
+                     },
+                     dataType: 'json',
+                     success: function (data) {
+                        $('#search-result').html(data.name + " was last seen in the " + data.compartment)
+
+                    }
+                });
+                return false;
+               });
+
+        });
+    </script>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+        <!--header -->
+        <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            <a class="navbar-brand" href="{% url 'ship:index' %}">ship</a>
+
+        </div>
+
+
+        <!-- items -->
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="{% url 'ship:departments' %}">
+                         departments
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="{% url 'ship:records' %}">
+                         records
+                    </a>
+                </li>
+            </ul>
+
+            <form class="navbar-form navbar-left" role="search" id="soldier-search" method="post"> <!--action="#"-->
+                <div class="form-group">
+                    <input type="text" class="form-control" name="soldier-name-to-query" id="soldier-name-to-query" value="">
+                </div>
+               <!--<button type="submit" class="btn btn-default">Search</button>-->
+                <!-- Button trigger modal -->
+                <button type="submit" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                  Search Soldier
+                </button>
+
+            </form>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+{#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+{#                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>#}
+                  </div>
+                  <div id="search-result" class="modal-body" role="document" >
+                    this soldier is in the cic
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                    <a href="/admin">
+                         Admin
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block body %}
+{% endblock %}
+</body>
+</html>
