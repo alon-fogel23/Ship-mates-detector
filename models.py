@@ -24,8 +24,9 @@ class Soldier(models.Model):
     tag = models.CharField(max_length=250, default="0x00 0x00 0x00 0x00")
     soldier_name = models.CharField(max_length=250)
     last_seen_pre_defined_max_time = models.IntegerField(default=240)
-    sleep_time_pre_defined_max_time = models.IntegerField(default=360)
+    lack_of_movement_pre_defined_max_time = models.IntegerField(default=360)
     current_compartment = models.CharField(max_length=250, default='CIC')
+    last_time_stamp = models.CharField(max_length=250, default='2000-01-01 12:34:56')
     battle_stations_compartment = models.CharField(max_length=250, default='CIC')
     soldier_security_class = models.IntegerField(default=1)  # 1 = BALMAS , 2 = SODY
 
