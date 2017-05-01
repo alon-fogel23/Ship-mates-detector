@@ -21,7 +21,7 @@
                      },
                      dataType: 'json',
                      success: function (data) {
-                        $('#search-result').html(data.name + " was last seen in the " + data.compartment)
+                        $('#search-result').html(data.name + " was last seen in the " + data.compartment + " at " + data.last_time_stamp)
 
                     }
                 });

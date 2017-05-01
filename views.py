@@ -1,14 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from ship.models import Compartment, Department, Soldier, SingleRecord
+from ship.models import Compartment, Department, Soldier, SingleRecord, ViewMode
 from django.utils.dateparse import parse_datetime
 from datetime import timedelta
 from django.http import JsonResponse
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic.edit import CreateView
-from django.http import HttpResponse
 import datetime
-
-from django.shortcuts import render_to_response
+import csv
 
 
 def index(request):
@@ -16,7 +12,7 @@ def index(request):
     all_records = SingleRecord.objects.all()
     all_soldiers = Soldier.objects.all()
     all_compartment = Compartment.objects.all()
-
+    viewmode = ViewMode.objects.all()[0].view_mode
     counters = {}
     missing_counters = {}
     battle_station_counter = 0
@@ -26,7 +22,14 @@ def index(request):
     unauthorized_soldiers = {}
     lack_of_movement_soldiers = {}
 
+    if viewmode == '1':
+        all_soldiers = all_soldiers.exclude(officer=1)
+    if viewmode == '2':
+        all_soldiers = all_soldiers.exclude(baknaz_team=0)
     for soldier in all_soldiers:
+
+        # soldier.refresh_from_db()
+
         # filtering the best read for each soldier of the past 10 seconds read-outs
         last_read = soldier.records.latest('time_stamp')
         last_record_time_1 = parse_datetime(last_read.time_stamp)
@@ -96,13 +99,13 @@ def index(request):
         else:
             counters[current_compartment] += 1
             present_soldiers[current_compartment].add(present_soldier)
-        # print(unauthorized_soldiers)
+
     return render(request, 'ship/index.html',
                   {'all_departments': all_departments, 'all_records': all_records,
                    'counters': counters, 'present_soldiers': present_soldiers, 'all_soldiers': all_soldiers,
                    'ship_in_battle_stations': ship_in_battle_stations, 'missing_soldiers': missing_soldiers,
                    'missing_counters': missing_counters, 'unauthorized_soldiers': unauthorized_soldiers,
-                   'lack_of_movement_soldiers': lack_of_movement_soldiers
+                   'lack_of_movement_soldiers': lack_of_movement_soldiers, 'viewmode': viewmode
                    })
 
 
@@ -128,6 +131,17 @@ def details(request, department_id):
 
 def records(request):
     all_records = SingleRecord.objects.all()
+    # ship_records_backup = open(r'C:\Users\Alon Fogel\Desktop\website\ship_records.txt', 'w')
+    # writes to the manage.py folder
+    with open(r'ship_records.csv', 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for record in all_records:
+            spamwriter.writerow(record.soldier_name + ' ' + record.time_stamp + ' ' + record.compartment + ' ' + record.signal_strength)
+
+
+    # ship_records_backup.close()
+    # doc_request = get_csv(request)
     return render(request, 'ship/records.html', {'all_records': all_records})
 
 

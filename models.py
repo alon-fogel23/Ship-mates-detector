@@ -19,6 +19,13 @@ class Department(models.Model):
         return self.department_name + ' - ' + self.officer
 
 
+class ViewMode(models.Model):
+    view_mode = models.CharField(max_length=2, default='0')
+
+    def __str__(self):
+        return self.view_mode
+
+
 class Soldier(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     tag = models.CharField(max_length=250, default="0x00 0x00 0x00 0x00")
@@ -29,6 +36,8 @@ class Soldier(models.Model):
     last_time_stamp = models.CharField(max_length=250, default='2000-01-01 12:34:56')
     battle_stations_compartment = models.CharField(max_length=250, default='CIC')
     soldier_security_class = models.IntegerField(default=1)  # 1 = BALMAS , 2 = SODY
+    baknaz_team = models.BooleanField(default=0)
+    officer = models.BooleanField(default=0)
 
     def __str__(self):
         return self.soldier_name

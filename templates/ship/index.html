@@ -5,14 +5,16 @@
 {% block body %}
 
 
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <h1 align="center"><span class="label label-primary"> INS EILAT  </span></h1>
 
 
-        {% if ship_in_battle_stations == 'SHIP IN BATTLE STATIONS !'  %}
+        {% if ship_in_battle_stations == 'SHIP IN BATTLE STATIONS !' and viewmode != '2' %}
             <h1 align="center"><span class="label label-success"  > {{ ship_in_battle_stations }} </span> </h1>
-        {% else %}
+        {% elif ship_in_battle_stations == 'SHIP NOT IN BATTLE STATIONS ' and viewmode != '2'  %}
            <h1 align="center"><span class="label label-warning"  > {{ ship_in_battle_stations }} </span> </h1>
+        {% elif  viewmode == '2'  %}
+            <h1 align="center"><span class="label label-danger"  > FIRE FLOOD EMERGENCY </span> </h1>
         {% endif %}
     <br>
 
@@ -27,7 +29,7 @@
             <div class="ship-compartment c1">
                 <div class="c1-spacer"></div>
                 <div class="c1-content">
-                    <div class="label label-primary" style="margin: 0 auto; align-self: center;">{{ counters.bow }}</div>
+                    <div class="label label-primary" id="c1" style="margin: 0 auto; align-self: center;">{{ counters.bow }}</div>
                 </div>
                 <div class="c1-spacer"></div>
             </div>
@@ -62,9 +64,9 @@
             <tr>
                 <th style="color: red">First Name</th>
             </tr>
-            {% for solider in missing_soldiers %}
+            {% for soldier in missing_soldiers %}
                 <tr>
-                    <td style="color: red">{{ solider }}</td>
+                    <td style="color: red">{{ soldier }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -75,10 +77,22 @@
         <table class="table">
             <tr>
                 <th>First Name</th>
+                <th>Security Clearance</th>
+                <th>Lack of Movement</th>
             </tr>
-            {% for solider in present_soldiers.bow %}
+            {% for soldier in present_soldiers.bow %}
                 <tr>
-                    <td>{{ solider }}</td>
+                    <td>{{ soldier }}</td>
+                {% if soldier in unauthorized_soldiers %}
+                    <td style="color: red">unauthorized</td>
+                {% else %}
+                    <td style="color:green">authorized</td>
+                {% endif %}
+                {% if soldier in lack_of_movement_soldiers %}
+                    <td style="color: red">lack of movement</td>
+                {% else %}
+                    <td style="color:green">OK</td>
+                {% endif %}
                 </tr>
             {% endfor %}
         </table>
@@ -90,10 +104,22 @@
         <table class="table">
             <tr>
                 <th>First Name</th>
+                <th>Security Clearance</th>
+                <th>Lack of Movement</th>
             </tr>
-            {% for solider in present_soldiers.cic %}
+            {% for soldier in present_soldiers.cic %}
                 <tr>
-                    <td>{{ solider }}</td>
+                    <td>{{ soldier }}</td>
+                {% if soldier in unauthorized_soldiers %}
+                    <td style="color: red">unauthorized</td>
+                {% else %}
+                    <td style="color:green">authorized</td>
+                {% endif %}
+                {% if soldier in lack_of_movement_soldiers %}
+                    <td style="color: red">lack of movement</td>
+                {% else %}
+                    <td style="color:green">OK</td>
+                {% endif %}
                 </tr>
             {% endfor %}
         </table>
@@ -105,10 +131,23 @@
         <table class="table">
             <tr>
                 <th>First Name</th>
+                <th>Security Clearance</th>
+                <th>Lack of Movement</th>
             </tr>
-            {% for solider in present_soldiers.bridge %}
+            {% for soldier in present_soldiers.bridge %}
                 <tr>
-                    <td>{{ solider }}</td>
+                    <td>{{ soldier }}</td>
+                {% if soldier in unauthorized_soldiers %}
+                    <td style="color: red">unauthorized</td>
+                {% else %}
+                    <td style="color:green">authorized</td>
+                {% endif %}
+                {% if soldier in lack_of_movement_soldiers %}
+                    <td style="color: red">lack of movement</td>
+                {% else %}
+                    <td style="color:green">OK</td>
+                {% endif %}
+                </tr>
                 </tr>
             {% endfor %}
         </table>
@@ -120,16 +159,29 @@
         <table class="table">
             <tr>
                 <th>First Name</th>
+                <th>Security Clearance</th>
+                <th>Lack of Movement</th>
             </tr>
-            {% for solider in present_soldiers.engine %}
+            {% for soldier in present_soldiers.engine %}
                 <tr>
-                    <td>{{ solider }}</td>
+                    <td>{{ soldier }}</td>
+                {% if soldier in unauthorized_soldiers %}
+                    <td style="color: red">unauthorized</td>
+                {% else %}
+                    <td style="color:green">authorized</td>
+                {% endif %}
+                {% if soldier in lack_of_movement_soldiers %}
+                    <td style="color: red">lack of movement</td>
+                {% else %}
+                    <td style="color:green">OK</td>
+                {% endif %}
+                </tr>
                 </tr>
             {% endfor %}
         </table>
     </div>
 
-
+{% endblock %}
 
 
     {% comment %}          {% for singlerecord in all_records %}
@@ -145,4 +197,3 @@
 {#        {% endfor %}#}
 {#    </ul>#}
 
-{% endblock %}
